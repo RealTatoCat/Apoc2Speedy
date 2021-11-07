@@ -1,0 +1,31 @@
+local running = false
+local gs = game.GetService
+local uis = gs(game,"UserInputService")
+local e = Enum.KeyCode
+local it = 0
+local r = {"LeftShift","Up","Delete"}
+local hb = gs(game,"RunService").Heartbeat:connect(function()
+   local c = game.Players.LocalPlayer.Character
+   if running and c and c.Humanoid then
+       c.Humanoid.WalkSpeed = 100
+   end
+end)
+local oof =
+uis.InputBegan:connect(function(k)
+   if k.KeyCode == e["X"] then
+       running = true
+   elseif k.KeyCode == e[r[it+1]] then
+       it = it+1
+       if r[it] == "Delete" then
+           hb:Disconnect()
+           it = 0
+       end
+   end
+end)
+uis.InputEnded:connect(function(k)
+   if k.KeyCode == e["X"] then
+       running = false
+   elseif it ~= 0 and k.KeyCode == e[r[it]] then
+       it = 0
+   end
+end) 
